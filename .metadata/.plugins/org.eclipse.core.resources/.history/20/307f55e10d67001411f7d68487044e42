@@ -1,0 +1,264 @@
+package LEDAPC;
+
+import java.io.*;
+import java.util.*;
+
+class Nodes
+{
+	int data;
+	Nodes next;
+	Nodes prev;
+   public Nodes()
+   {
+	   this.data=0;
+	   this.next=null;
+	   this.prev=null;
+   }
+   public Nodes(int data,Nodes prev,Nodes next)
+   {
+	   this.data=data;
+	   this.next=next;
+	   this.prev=prev;
+   }
+   public void setnext(Nodes n)
+   {
+	   next=n;
+	   
+   }
+   public void setprev(Nodes p)
+   {
+	   prev=p;
+	   
+   }
+   public void setData(int d)
+   {
+	   data=d;
+	   
+   }
+   public Nodes getnext()
+   {
+	   return next;
+	   
+   }
+   public Nodes getprev()
+   {
+	   return prev;
+	   
+   }
+   public int getData()
+   {
+	   return data;
+	   
+   }
+}
+
+class dll{
+	
+	Nodes start;
+	Nodes end;
+	int size;
+    public dll()
+    {
+        start = null;
+        end = null;
+        size = 0;
+    }
+    
+    public boolean isEmpty()
+    {
+        return start == null;
+    }
+    
+    public int getSize()
+    {
+        return size;
+    }  
+    
+    public void insertAtPos(int val,int pos)
+    {
+    	Nodes n=new Nodes(val,null,null);
+    	Nodes ptr=start;
+    	if(start==null)
+    	{
+    		start=n;
+    		end=start;
+    		size++;
+    		return;
+    	}
+    	if(pos!=0)
+    	pos=pos-1;
+    	if(pos==0)
+    	{
+            n.setnext(start);
+            start.setprev(n);
+            start = n;
+            size++;
+    		return;
+    	}
+    	if(pos==size)
+    	{
+            end.setnext(n);
+            n.setprev(end);
+            end = n;
+            size++;
+    		return;
+    	}
+    	//System.out.println("hi1");
+    	for(int i=1;i<=size;i++)
+    	{
+    		if(i==pos)
+    		{
+    			Nodes tmp=ptr.getnext();
+    			ptr.setnext(n);
+    			n.setnext(tmp);
+    			tmp.setprev(n);
+    			size++;
+    			System.out.println("hi2");
+    			break;
+    		}
+    		ptr=ptr.getnext();
+    	}
+    	
+    }
+    public void display()
+    {
+       
+    	if (size == 0) 
+        {
+            System.out.print("empty\n");
+            return;
+        }    
+        if (start.getnext() == null) 
+        {
+        	//System.out.println("hi");
+            System.out.println(start.getData());
+            return;
+        }
+        Nodes ptr = start;
+        System.out.print(start.getData()+ "->");
+        ptr = start.getnext();
+        while (ptr.getnext() != null)
+        {
+            System.out.print(ptr.getData()+ "->");
+            ptr = ptr.getnext();
+        }
+        System.out.print(ptr.getData()+ "\n");
+    }
+}
+
+public class pgm1 {
+	
+	public static void main(String[] args)
+	{
+		int n,m,i=1,pos=1;
+		Nodes a,b;
+		dll d1=new dll();
+		dll d2=new dll();
+		dll d3=new dll();
+		
+		System.out.println("enter the size of the list");
+		Scanner in=new Scanner(System.in);
+		n=in.nextInt();
+		System.out.println("enter the elements of 1st list");
+		/*m=in.nextInt();*/
+		do
+		{
+			m=in.nextInt();
+		    d1.insertAtPos(m,i);
+		    i++;
+		}
+		while(i<=n);
+		System.out.print("1st list is:" );
+		d1.display();
+		
+		
+		i=1;
+		System.out.println("enter the elements of 2nd list");
+		/*m=in.nextInt();*/
+		do
+		{
+			m=in.nextInt();
+		    d2.insertAtPos(m,i);
+		    i++;
+		}
+		while(i<=n);
+		System.out.print("2nd list is:" );
+		d2.display();
+		
+		a=d1.start;
+		b=d2.start;
+		for(i=1;i<=(d1.getSize()*2);i++)
+		{
+			if(i%2==0)
+			{
+				System.out.println("if"+a.getData()+" "+b.getData());
+					if(a.getData()>b.getData())
+					{
+						d3.insertAtPos(m,a.getData());
+						a=a.getnext();
+						if(a.getnext()==null)
+						{
+							while(i<=(d1.getSize()*2))
+							{
+							d3.insertAtPos(m,b.getData());
+							b=b.getnext();
+							}
+							break;
+						}
+					}
+					else
+					{
+						d3.insertAtPos(m,b.getData());
+						b=b.getnext();
+						if(b.getnext()==null)
+						 {
+							while(i<=(d1.getSize()*2))
+							{
+							d3.insertAtPos(m,a.getData());
+							a=a.getnext();
+							}
+							break;
+						 }
+					}
+			}
+			else
+			{
+				System.out.println("else"+a.getData()+" "+b.getData());
+					if(a.getData()<b.getData())
+					{
+						d3.insertAtPos(m,a.getData());
+						a=a.getnext();
+						if(a.getnext()==null)
+						{
+							while(i<=(d1.getSize()*2))
+							{
+							d3.insertAtPos(m,b.getData());
+							b=b.getnext();
+							}
+							break;
+						}
+					}
+					else
+					{
+						d3.insertAtPos(m,b.getData());
+						b=b.getnext();
+						if(b.getnext()==null)
+						{
+							while(i<=(d1.getSize()*2))
+							{
+							d3.insertAtPos(m,a.getData());
+							a=a.getnext();
+							}
+							break;
+						}
+					}
+				
+			}
+			
+		}
+		System.out.print("final list is:" );
+		d3.display();
+		
+}
+
+}

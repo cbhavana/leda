@@ -1,0 +1,220 @@
+package slinkedlist;
+
+import java.util.Scanner;
+
+class Nodes
+{
+	int data;
+	Nodes next;
+	Nodes prev;
+   public Nodes()
+   {
+	   this.data=0;
+	   this.next=null;
+	   this.prev=null;
+   }
+   public Nodes(int data,Nodes prev,Nodes next)
+   {
+	   this.data=data;
+	   this.next=next;
+	   this.prev=prev;
+   }
+   public void setnext(Nodes n)
+   {
+	   next=n;
+	   
+   }
+   public void setprev(Nodes p)
+   {
+	   prev=p;
+	   
+   }
+   public void setData(int d)
+   {
+	   data=d;
+	   
+   }
+   public Nodes getnext()
+   {
+	   return next;
+	   
+   }
+   public Nodes getprev()
+   {
+	   return prev;
+	   
+   }
+   public int getData()
+   {
+	   return data;
+	   
+   }
+}
+class doublinkedlist{
+	
+	Nodes start;
+	Nodes end;
+	int size;
+    public doublinkedlist()
+    {
+        start = null;
+        end = null;
+        size = 0;
+    }
+    
+    public boolean isEmpty()
+    {
+        return start == null;
+    }
+    
+    public int getSize()
+    {
+        return size;
+    }  
+    
+    public void insertAtPos(int val,int pos)
+    {
+    	Nodes n=new Nodes(val,null,null);
+    	Nodes ptr=start;
+    	if(start==null)
+    	{
+    		start=n;
+    		end=start;
+    		size++;
+    		return;
+    	}
+    	pos=pos-1;
+    	if(pos==0)
+    	{
+            n.setnext(start);
+            start.setprev(n);
+            start = n;
+            size++;
+    		return;
+    	}
+    	if(pos==size)
+    	{
+            end.setnext(n);
+            n.setprev(end);
+            end = n;
+            size++;
+    		return;
+    	}
+    	System.out.println("hi1");
+    	for(int i=1;i<size;i++)
+    	{
+    		if(i==pos)
+    		{
+    			Nodes tmp=ptr.getnext();
+    			ptr.setnext(n);
+    			n.setnext(tmp);
+    			tmp.setprev(n);
+    			size++;
+    			System.out.println("hi2");
+    			break;
+    		}
+    		ptr=ptr.getnext();
+    	}
+    	
+    }
+    public void delAtPos(int pos)
+    {
+    	 
+ 	   Nodes ptr=start;
+ 	  Nodes temp=new Nodes(0,null,null);
+ 	 Nodes temp1=new Nodes(0,null,null);
+ 	  if(pos==1)
+ 	  {
+ 		  start=start.getnext();
+ 		  start.setprev(null);
+ 		  size--;
+ 		  return;
+ 	  }
+ 	   for(int i=1;i<=size;i++)
+ 	   {
+ 		  
+ 		   if(i==pos-1)
+ 		   {
+ 			    temp=ptr;
+ 		   }
+ 		   if(i==pos)
+ 		   {
+ 			   temp.setnext(ptr.getnext());
+ 			   temp1=ptr.getnext();
+ 			   temp1.setprev(temp);
+ 		   }
+ 		  ptr=ptr.getnext();
+ 		  
+ 	   }
+    }
+    
+    public void display()
+    {
+        System.out.print("\nSingly Linked List = ");
+        if (size == 0) 
+        {
+            System.out.print("empty\n");
+            return;
+        }    
+        if (start.getnext() == null) 
+        {
+        	System.out.println("hi");
+            System.out.println(start.getData());
+            return;
+        }
+        Nodes ptr = start;
+        System.out.print(start.getData()+ "->");
+        ptr = start.getnext();
+        while (ptr.getnext() != null)
+        {
+            System.out.print(ptr.getData()+ "->");
+            ptr = ptr.getnext();
+        }
+        System.out.print(ptr.getData()+ "\n");
+    }
+}
+public class dlinkedlist {
+	  public static void main(String[] args)
+
+	    {             
+
+	        Scanner scan = new Scanner(System.in);
+	       int pos=1,i=1;
+	       char ch;
+	        /* Creating object of class linkedList */
+
+	        linkedlist list = new linkedlist(); 
+	         
+	        System.out.println("Singly Linked List Test\n");          
+
+	            System.out.println("1. insert at begining");
+	           for(i=1;i<=5;i++)
+	            {
+	                System.out.println("Enter integer element to insert");
+	                int num = scan.nextInt() ;
+	                list.insertAtPos(num, pos);
+	                
+	            }
+	           list.insertAtPos(10,1);
+	               /* System.out.println("Enter position");
+	                int pos = scan.nextInt() ;
+	                if (pos <= 1 || pos > list.getSize() )
+	                    System.out.println("Invalid position\n");
+	                else
+	                    list.insertAtPos(num, pos);                                        
+	                System.out.println("Enter position");
+	                int p = scan.nextInt() ;
+	                if (p < 1 || p > list.getSize() )
+	                    System.out.println("Invalid position\n");*/
+	           System.out.println("1. insert at middle");
+	           int num = scan.nextInt();
+	           pos=3;
+	           list.insertAtPos(num, pos);
+	            list.display();
+	           System.out.println("enter a number to delete at positon");
+	             num = scan.nextInt();
+	             list.delAtPos(num);
+	             list.display();
+	    }
+
+}

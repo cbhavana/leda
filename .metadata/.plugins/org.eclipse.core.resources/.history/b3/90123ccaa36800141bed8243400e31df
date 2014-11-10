@@ -1,0 +1,264 @@
+package slinkedlist;
+
+public class sentinal {
+	
+	public static void main(String[] args)
+	{
+		dll list=new dll();
+		 dll.freelisth= dll.createfreelist(20);
+		list.insertFirst(50);
+		list.insertLast(60);
+		list.insertFirst(40);
+		list.insertFirst(30);
+		list.insertFirst(20);
+		list.insertFirst(10);
+		list.display();
+		Nodes a=list.findnode(40);
+		//System.out.println(a);
+		
+	}
+
+}
+class Nodes
+{
+	int data;
+	Nodes next;
+	Nodes prev;
+   public Nodes()
+   {
+	   this.data=0;
+	   this.next=null;
+	   this.prev=null;
+   }
+   public Nodes(int data,Nodes prev,Nodes next)
+   {
+	   this.data=data;
+	   this.next=next;
+	   this.prev=prev;
+   }
+   public void setnext(Nodes n)
+   {
+	   next=n;
+	   
+   }
+   public void setprev(Nodes p)
+   {
+	   prev=p;
+	   
+   }
+   public void setData(int d)
+   {
+	   data=d;
+	   
+   }
+   public Nodes getnext()
+   {
+	   return next;
+	   
+   }
+   public Nodes getprev()
+   {
+	   return prev;
+	   
+   }
+   public int getData()
+   {
+	   return data;
+	   
+   }
+}
+
+class dll
+{
+	 static Nodes freelisth;
+	static  Nodes mylisth;
+	
+	public dll() {
+		mylisth=null;
+	}
+	
+	public static Nodes createfreelist(int size) 
+	{
+		
+		Nodes freelisth=new Nodes();
+		freelisth.prev=freelisth.next=freelisth;
+		Nodes temp=freelisth;
+		for(int i=1;i<=size;i++) 
+		{
+			Nodes node1=new Nodes();
+			temp.next=node1;
+			freelisth.prev=node1;
+			node1.next=freelisth;
+			node1.prev=temp;
+			temp=node1;
+		}		
+		return freelisth;
+	}
+	
+public Nodes findnode(int val) 
+{
+		Nodes temp=mylisth.next;
+		mylisth.data=val;
+		while(temp.data!=val) {
+			temp=temp.next;
+		}
+		return temp;
+	}
+public boolean  insertAfter(int n1, int n2) {
+	
+	if(freelisth.next==freelisth) 
+	{
+		System.out.println("not enough free memory");
+		return false;
+	}
+	else 
+	{
+			Nodes node1=freelisth.next;
+			freelisth.next=freelisth.next.next;
+			freelisth.next.prev=freelisth;
+			node1.setData(n1);
+			if(mylisth==null) 
+			{
+				mylisth=new Nodes();
+				mylisth.next=mylisth.prev=node1;
+				node1.next=node1.prev=mylisth;
+			} 
+			else 
+			{
+				Nodes afterNode=findnode(n2);
+				if(afterNode==mylisth)
+				System.out.println("item with such node doesnt exist");
+				else 
+				{
+					
+					splice(node1, node1, afterNode);}
+			    }
+	return true;
+			
+	}
+}
+public void insertFirst(int n1)
+{
+	if(freelisth.next==freelisth)
+		System.out.println("not enough free memory");
+	else 
+	{
+			Nodes node1=freelisth.next;
+			freelisth.next=freelisth.next.next;
+			freelisth.next.prev=freelisth;
+			node1.setData(n1);
+			if(mylisth==null) 
+			 {
+				mylisth=new Nodes();
+				mylisth.next=mylisth.prev=node1;
+				node1.next=node1.prev = mylisth;
+			 } 
+			else 
+			 {
+				splice(node1,node1,mylisth);
+			 }	
+	}
+}
+public void insertLast(int n1) 
+{
+	
+	if(freelisth.next == freelisth)
+		System.out.println("not enough free memory");
+	
+	else 
+	{
+		Nodes node1 = freelisth.next;
+		freelisth.next = freelisth.next.next;
+		freelisth.next.prev = freelisth;
+		node1.setData(n1);
+		if(mylisth==null) 
+		{
+			mylisth = new Nodes();
+			mylisth.next = mylisth.prev = node1;
+			node1.next = node1.prev = mylisth;
+		} 
+		else 
+		{
+			Nodes t=mylisth.prev;
+			splice(node1, node1, t);
+		}
+			
+	}
+}
+public void splice(Nodes a,Nodes b,Nodes c)
+{
+	
+	Nodes a1,b1,c1;
+	
+	a1=a.prev;
+	b1=b.next;
+	a1.next=b1;
+	b1.prev=a1;
+	
+	c1=c.next;
+	b.next=c1;
+	a.prev=c;
+	c.next=a;
+	c1.prev=b;
+	
+}
+public void display()
+{
+	System.out.println();
+	Nodes temp=mylisth.next;
+		do{
+			System.out.print(temp.data+"  ");
+			temp=temp.next;
+		}
+		while(temp!=mylisth);
+	
+}
+public void insertBefore(int x,Nodes t)
+{
+	int temp=t.prev.data;
+	insertAfter(x,temp);
+	
+}
+
+public void moveAfter(Nodes a,Nodes b)
+{
+	splice(a,a,b);
+}
+
+public void moveFront(Nodes b)
+{
+	
+	moveAfter(b,mylisth);
+	
+}
+
+public void moveBack(Nodes b)
+{
+	Nodes temp=mylisth.prev;
+	moveAfter(b,temp);
+}
+
+public void remove(Nodes t)
+{
+	moveAfter(t,freelisth);
+	
+}
+
+public void popFront()
+{
+	remove(mylisth.next);
+}
+
+public void popBack()
+{
+	remove(mylisth.prev);
+}
+
+public Nodes findHead()
+{
+	return mylisth;
+}
+
+}
+
+
